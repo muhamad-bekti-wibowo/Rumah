@@ -45,22 +45,18 @@
             }
         }
         function Connected() {
-            $.get("https://script.google.com/macros/s/AKfycbzfbR75aXyB5mm8yzM4WgafEZZfocv7BcvwnuEP4qClfu6nUaYWQDOf4LdYOAlMdXMp/exec?read=&username=" + document.getElementById("username").value + "&password=" + document.getElementById("password").value, function (data, status) {
-                arrdata = data;
-                const key = data.split(",");
-                sub_topics("/bekti/" + key[7] + "/tds");
-                sub_topics("/bekti/" + key[7] + "/ec");
-                sub_topics("/bekti/" + key[7] + "/ph");
-                sub_topics("/bekti/" + key[7] + "/twater");
-                sub_topics("/bekti/" + key[7] + "/troom");
-                sub_topics("/bekti/" + key[7] + "/hum");
-                sub_topics("/bekti/" + key[7] + "/lux");
-            });
-
+            const key = arrdata.split(",");
+            sub_topics("/bekti/" + key[7] + "/tds");
+            sub_topics("/bekti/" + key[7] + "/ec");
+            sub_topics("/bekti/" + key[7] + "/ph");
+            sub_topics("/bekti/" + key[7] + "/twater");
+            sub_topics("/bekti/" + key[7] + "/troom");
+            sub_topics("/bekti/" + key[7] + "/hum");
+            sub_topics("/bekti/" + key[7] + "/lux");
         }
         $(document).ready(function () {
 
-            MQTTconnect('broker.hivemq.com', 8884);
+            //
         }); 
     </script>
 
@@ -87,47 +83,106 @@
             </div>
             <hr>
             <div class="terminal">
-                a
+                Terminal
             </div>
-            <div>
-                <input type="text" id="username" value="username">
-                <input type="text" id="password" value="password">
+            <hr>
+            <div class="login"
+                style="display: flex; flex-wrap: wrap; width: 400px; justify-content: center; align-items: center;">
+                <div>
+                    <div class="login" style="position: absolute; font-size: 10px; margin: -1px 0px 0px 27px;">Username</div>
+                    <div class="login" style="position: absolute; font-size: 10px; margin: -1px 0px 0px 212px;">Password</div>
+                    <input type="text" id="username" value="username">
+
+                    <input type="text" id="password" value="password">
+                    <div  class="login" style="position: absolute; font-size: 10px; margin: -1px 0px 0px 27px;"> Broker</div>
+                    <div  class="login" style="position: absolute; font-size: 10px; margin: -1px 0px 0px 212px;">Port</div>
+                    <input type="text" id="broker" value="broker.hivemq.com">
+
+                    <input type="text" id="port" value="8884">
+                    <style>
+                        input {
+                            box-shadow: 0px 15px 20px 10px rgba(0, 0, 0, 0.2);
+                            width: 170px;
+                            height: 30px;
+                            border-radius: 5px;
+                            background-color: rgb(238, 238, 238);
+                            color: rgb(0, 0, 0);
+                            border: rgb(255, 255, 255) solid 1px;
+                            text-align: center;
+                            margin: 5px;
+                        }
+
+                        button {
+                            box-shadow: 0px 15px 20px 10px rgba(0, 0, 0, 0.2);
+                            width: 400px;
+                            height: 35px;
+                            border-radius: 5px;
+                            background-color: rgba(0, 0, 0, 0.349);
+                            color: rgb(255, 255, 255);
+                            border: #fff solid 1px;
+                            margin: 5px;
+                        }
+                    </style>
+                </div>
+                <button onclick="login()">Login</button>
+                <script>
+                    function login() {
+                        $(".data").slideDown("slow");
+                        $(".login").slideUp("slow");
+                        $.get("https://script.google.com/macros/s/AKfycbzfbR75aXyB5mm8yzM4WgafEZZfocv7BcvwnuEP4qClfu6nUaYWQDOf4LdYOAlMdXMp/exec?read=&username=" +
+                            document.getElementById("username").value + "&password=" +
+                            document.getElementById("password").value, function (data, status) {
+                                arrdata = data;
+                                MQTTconnect(document.getElementById("broker").value, parseInt(document.getElementById("port").value));
+                            });
+                    }
+                </script>
             </div>
-            <div style="display: flex; flex-wrap: wrap; width: 400px; justify-content: center; align-items: center;">
-                <div style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
-                    <div style=" padding: 5px;">Total Dissolved Solids</div>
-                    <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
-                    <div class="tds" style=" padding: 5px;">1 ppm</div>
-                </div>
-                <div style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
-                    <div style=" padding: 5px;">Electrical Conductivity</div>
-                    <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
-                    <div class="ec" style=" padding: 5px;">1 EC</div>
-                </div>
-                <div style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
-                    <div style=" padding: 5px;">Potential Hydrogen</div>
-                    <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
-                    <div class="ph" style=" padding: 5px;">1 ph</div>
-                </div>
-                <div style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
-                    <div style=" padding: 5px;">Temperature Water</div>
-                    <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
-                    <div class="twater" style=" padding: 5px;">1 °C</div>
-                </div>
-                <div style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
-                    <div style=" padding: 5px;">Temperature Room</div>
-                    <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
-                    <div class="troom" style=" padding: 5px;">1 °C</div>
-                </div>
-                <div style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
-                    <div style=" padding: 5px;">Humidity Room</div>
-                    <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
-                    <div class="hum" style=" padding: 5px;">1 %</div>
-                </div>
-                <div style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
-                    <div style=" padding: 5px;">Lux Room</div>
-                    <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
-                    <div class="lux" style=" padding: 5px;">1 lux</div>
+            <div class="data" style="display: none;">
+                <div
+                    style="display: flex; flex-wrap: wrap; width: 400px; justify-content: center; align-items: center;">
+                    <div
+                        style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
+                        <div style=" padding: 5px;">Total Dissolved Solids</div>
+                        <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
+                        <div class="tds" style=" padding: 5px;">1 ppm</div>
+                    </div>
+                    <div
+                        style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
+                        <div style=" padding: 5px;">Electrical Conductivity</div>
+                        <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
+                        <div class="ec" style=" padding: 5px;">1 EC</div>
+                    </div>
+                    <div
+                        style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
+                        <div style=" padding: 5px;">Potential Hydrogen</div>
+                        <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
+                        <div class="ph" style=" padding: 5px;">1 ph</div>
+                    </div>
+                    <div
+                        style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
+                        <div style=" padding: 5px;">Temperature Water</div>
+                        <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
+                        <div class="twater" style=" padding: 5px;">1 °C</div>
+                    </div>
+                    <div
+                        style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
+                        <div style=" padding: 5px;">Temperature Room</div>
+                        <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
+                        <div class="troom" style=" padding: 5px;">1 °C</div>
+                    </div>
+                    <div
+                        style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
+                        <div style=" padding: 5px;">Humidity Room</div>
+                        <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
+                        <div class="hum" style=" padding: 5px;">1 %</div>
+                    </div>
+                    <div
+                        style="border: 1px solid rgba(0, 0, 0, 0.062); margin:10px; border-radius: 10px; width: 170px;">
+                        <div style=" padding: 5px;">Lux Room</div>
+                        <div style=" height: 1px;  background-color:  rgba(0, 0, 0, 0.062);"></div>
+                        <div class="lux" style=" padding: 5px;">1 lux</div>
+                    </div>
                 </div>
             </div>
         </div>

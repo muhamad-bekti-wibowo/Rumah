@@ -48,7 +48,7 @@ function onConnected(recon, url) {
 function onFailure(message) {
     console.log("Failed");
     //document.getElementById("messages").innerHTML = "Connection Failed- Retrying";
-    setTimeout(MQTTconnect, reconnectTimeout);
+    setTimeout(MQTTconnect, 2000);
 }
 
 function onConnect() {
